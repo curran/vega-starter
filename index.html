@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/vega@3.0.7/build/vega.min.js"></script>
+  <script src="https://unpkg.com/vega-lite@2.0.0/build/vega-lite.min.js"></script>
+  <script src="https://unpkg.com/vega-embed@3.0.0-rc7/build/vega-embed.min.js"></script>
+  <script src="https://unpkg.com/d3@4.11.0/build/d3.min.js"></script>
+  <style>
+    body {
+      margin: 0px;
+    }
+  </style>
+</head>
+<body>  
+  <div id="vis"></div>
+  <script>  
+    const spec = data => ({
+      "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+      "width": 805,
+      "height": 52,
+      "data": {
+          "url": "data.csv"
+      },
+      "mark": "area",
+      "encoding": {
+          "x": {
+              "field": "timestamp",
+              "type": "temporal",
+              "axis": {
+                  "title": "Time",
+                  "grid": false
+              }
+          },
+          "y": {
+              "field": "temperature",
+              "type": "quantitative",
+              "axis": {
+                  "title": "Temp °C",
+                  "grid": false
+              }
+          },
+          "color": {
+              "field": "city",
+              "type": "nominal",
+              "legend": null
+          },
+          "row": {
+              "field": "city",
+              "type": "nominal",
+              "header": {"title": "City"}
+          }
+      }
+    });
+    
+    var opts = {
+      actions: {
+        export: false,
+        source: false,
+        editor: false
+      },
+      renderer: 'svg'
+    };
+    
+    d3.csv('data.csv', data => {
+      vegaEmbed('#vis', spec(data), opts);
+    });
+  </script>
+</body>
